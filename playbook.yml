@@ -13,6 +13,4 @@
       authorized_key:
         user: ubuntu
         state: present
-        key: 'ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDfkrYk+p/FqFKPPf1nkGz/Xm5cLyV6GBXImyMiTV0jngH83FutCfrI65eFZiYCu4eeXbdexSZho2m7gJndamx8/iQodJHT8hYMXPAhTsIS
-mrUvQ3h6U65zoENnP0OFXibHS8JLSbdded3c9TiDBmwWTLm2SkcW/eH2LbpJTIEFuy7i6cgBvE4rp/WmyzNQlV8x47kqqGPuuBs0hQkHK022hA3QE2yubQcIYvpaAvhWWvvddWTQAYA0MhzAmbXT1kWUrKpUvc
-QjWiGRV2UI3y7MXHBzwzqclAxkuz7/VB9BHlsR0H204gWaSA+gIgBuZqwvmaqeHGAFiD8HZD1T0U0F mike@ac-l08'
+        key: 'ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDfkrYk+p/FqFKPPf1nkGz/Xm5cLyV6GBXImyMiTV0jngH83FutCfrI65eFZiYCu4eeXbdexSZho2m7gJndamx8/iQodJHT8hYMXPAhTsISmrUvQ3h6U65zoENnP0OFXibHS8JLSbdded3c9TiDBmwWTLm2SkcW/eH2LbpJTIEFuy7i6cgBvE4rp/WmyzNQlV8x47kqqGPuuBs0hQkHK022hA3QE2yubQcIYvpaAvhWWvvddWTQAYA0MhzAmbXT1kWUrKpUvcQjWiGRV2UI3y7MXHBzwzqclAxkuz7/VB9BHlsR0H204gWaSA+gIgBuZqwvmaqeHGAFiD8HZD1T0U0F mike@ac-l08'
