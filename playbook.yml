@@ -33,3 +33,11 @@
         regexp: "^Port"
         line: "Port 7056"
       notify: "Restart ssh"
+
+
+
+  handlers:
+    - name: Restart ssh
+      service:
+        name: ssh
+        state: restarted
