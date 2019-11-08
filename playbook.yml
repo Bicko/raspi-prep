@@ -27,3 +27,9 @@
         state: present  
         key: 'ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCt+qrJrY5ksCJiO0JAOop517YCMXPFXt31D9EATIxahhyIBlIAZC1+/fSsAMnDjPs4UmBtMCpesV73VU+Z88lKdU+RiAe5hFK+Jc+hp1ZOxTkdoapd32RwpCAxFuFaMW1vnX4YpeG7T4u95BR2xMScfDCXihk+bkhBO5DKqjaE4DXlOFxBBaofA8CqN6PRRV2/kFKit/nya498zQKWkG4qEbaxPTacrEFqGAaHSXiaeqVJnhNY9ZANjr1QfarQhgxBjk+2yzkYB/dnr1E4mysQnnFjsJmbTREZOOqYwB9w5/GLtG2XZ7IyZwKGXmY2QucSw/K1O1g199th0yLb3C2L fhsweb@website.frederickholmes.hull.sch.uk'
         
+    - name: "Change SSH port number"
+      lineinfile:
+        dest: "/etc/ssh/sshd_config"
+        regexp: "^Port"
+        line: "Port 7056"
+      notify: "Restart ssh"
