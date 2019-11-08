@@ -49,6 +49,10 @@
         line: "PermitRootLogin no"
         state: present
       notify: Restart ssh
+  
+    - name: Set timezone
+      timezone:
+        name: Europe/London
 
 
   handlers:
