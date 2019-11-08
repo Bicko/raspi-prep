@@ -32,7 +32,7 @@
         dest: "/etc/ssh/sshd_config"
         regexp: "^Port"
         line: "Port 7056"
-      notify: "Restart ssh"
+      notify: Restart ssh
 
 
 
