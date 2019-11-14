@@ -39,7 +39,11 @@
         user: mike
         state: present  
         key: 'ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC1Qsji4M/UXHerft05HMTfxl1F0GBLaetaaqHvrQkmb2jaZMpIfh0WCYEf2PwZC0kY/2Ex1PQ8R9ZLZHEqkOmJ1ZXcmbwTo0k6Zx4wrNGl7KPWfLPCDTi/zT25ZEe+gZqZgpvF8gdUpyiXEf60mz8uvC54IRjpILEgXxfugpN9qcmW0C3lFcUTFKfXV3ZCjwZ6urL3qdWfyIjKzZ667M1gsyvzxllmBchrPBcnWySGP0SZ8O049Sqa50QoLAaPLeX15w6ELCTVVJEQeQ8mFw0HfPL91ceg3vy1IJuBFOzSA8ZtUM5nZgv+axY3Hx9yU/oTRGJmTQKKVXaqlZqlCKTV rock@Debian-Desktop'
-    
+ 
+    - name: Set hostname
+      hostname:
+        name: garage.orchard
+     
     - name: "Change SSH port number"
       lineinfile:
         dest: "/etc/ssh/sshd_config"
