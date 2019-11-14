@@ -4,6 +4,9 @@
 apt -y install python-pip
 pip install ansible
 
+add-apt-repository -y ppa:ubuntu-pi-flavour-makers/ppa
+apt-get update
+
 #Install git
 apt -y install git
 
