@@ -1,0 +1,67 @@
+---
+- hosts: localhost
+  connection: local
+  become: yes
+  
+  tasks:
+    - name: Change password of user 'ubuntu'
+      user:
+        name: ubuntu
+        password: '$6$ZbWanugns2E$6FeGCSWq97yivD1OZEMPPPWqEzhn.5GbvU4HEe.ohb7lXp3Dz5PcFWggdFh9.d/uvWr9Fbp4XiET2vahDALDY.'
+        
+    - name: "Set authorized_key for office desktop computer"
+      authorized_key:
+        user: ubuntu
+        state: present
+        key: 'ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDfkrYk+p/FqFKPPf1nkGz/Xm5cLyV6GBXImyMiTV0jngH83FutCfrI65eFZiYCu4eeXbdexSZho2m7gJndamx8/iQodJHT8hYMXPAhTsISmrUvQ3h6U65zoENnP0OFXibHS8JLSbdded3c9TiDBmwWTLm2SkcW/eH2LbpJTIEFuy7i6cgBvE4rp/WmyzNQlV8x47kqqGPuuBs0hQkHK022hA3QE2yubQcIYvpaAvhWWvvddWTQAYA0MhzAmbXT1kWUrKpUvcQjWiGRV2UI3y7MXHBzwzqclAxkuz7/VB9BHlsR0H204gWaSA+gIgBuZqwvmaqeHGAFiD8HZD1T0U0F mike@ac-l08'
+    
+    - name: "Set authorized_key for personal laptop"
+      authorized_key:
+        user: ubuntu
+        state: present  
+        key: 'ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC1Qsji4M/UXHerft05HMTfxl1F0GBLaetaaqHvrQkmb2jaZMpIfh0WCYEf2PwZC0kY/2Ex1PQ8R9ZLZHEqkOmJ1ZXcmbwTo0k6Zx4wrNGl7KPWfLPCDTi/zT25ZEe+gZqZgpvF8gdUpyiXEf60mz8uvC54IRjpILEgXxfugpN9qcmW0C3lFcUTFKfXV3ZCjwZ6urL3qdWfyIjKzZ667M1gsyvzxllmBchrPBcnWySGP0SZ8O049Sqa50QoLAaPLeX15w6ELCTVVJEQeQ8mFw0HfPL91ceg3vy1IJuBFOzSA8ZtUM5nZgv+axY3Hx9yU/oTRGJmTQKKVXaqlZqlCKTV rock@Debian-Desktop'
+    
+    - name: "Set authorized_key for existing server"
+      authorized_key:
+        user: ubuntu
+        state: present  
+        key: 'ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCt+qrJrY5ksCJiO0JAOop517YCMXPFXt31D9EATIxahhyIBlIAZC1+/fSsAMnDjPs4UmBtMCpesV73VU+Z88lKdU+RiAe5hFK+Jc+hp1ZOxTkdoapd32RwpCAxFuFaMW1vnX4YpeG7T4u95BR2xMScfDCXihk+bkhBO5DKqjaE4DXlOFxBBaofA8CqN6PRRV2/kFKit/nya498zQKWkG4qEbaxPTacrEFqGAaHSXiaeqVJnhNY9ZANjr1QfarQhgxBjk+2yzkYB/dnr1E4mysQnnFjsJmbTREZOOqYwB9w5/GLtG2XZ7IyZwKGXmY2QucSw/K1O1g199th0yLb3C2L fhsweb@website.frederickholmes.hull.sch.uk'
+        
+    - name: "Change SSH port number"
+      lineinfile:
+        dest: "/etc/ssh/sshd_config"
+        regexp: "^Port"
+        line: "Port 7056"
+      notify: Restart ssh
+      
+    - name: Disallow password authentication
+      lineinfile:
+        dest: "/etc/ssh/sshd_config"
+        regexp: "^PasswordAuthentication"
+        line: "PasswordAuthentication no"
+        state: present
+      notify: Restart ssh
+
+    - name: Disallow root SSH access
+      lineinfile:
+        dest: "/etc/ssh/sshd_config"
+        regexp: "^PermitRootLogin"
+        line: "PermitRootLogin no"
+        state: present
+      notify: Restart ssh
+  
+    - name: Set timezone
+      timezone:
+        name: Europe/London
+        
+    - name: Set GB locale
+      locale_gen:
+        name: en_GB.UTF-8
+        state: present
+
+
+  handlers:
+    - name: Restart ssh
+      service:
+        name: ssh
+        state: restarted
