@@ -9,11 +9,6 @@
         name: mandj
         gid: 1002
         state: present
-        
-    - name: Change password of user 'ubuntu'
-      user:
-        name: ubuntu
-        password: '$6$ZbWanugns2E$6FeGCSWq97yivD1OZEMPPPWqEzhn.5GbvU4HEe.ohb7lXp3Dz5PcFWggdFh9.d/uvWr9Fbp4XiET2vahDALDY.'
 
     - name: Create a user account for Mike
       user:
