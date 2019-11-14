@@ -1,11 +1,11 @@
 #!/bin/bash
 
 #Install Ansible
-sudo apt install python-pip
+sudo apt -y install python-pip
 sudo pip install ansible
 
 #Install git
-sudo apt install git
+sudo apt -y install git
 
 #Get the repo, if not already present
 cd ~
