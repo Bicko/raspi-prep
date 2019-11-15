@@ -89,15 +89,16 @@
         update_cache: yes
         cache_valid_time: 3600
         
-    - name: Install python3-gpiozero
+    - name: Install packages
       apt:
-        name: python3-gpiozero
-        state: present
+        pkg:
+        - python3-gpiozero
+        - python-gpiozero
+        - mysql-client
+        - mysql-server
+        - python-mysqldb
+        - python3-mysqldb
         
-    - name: Install python-gpiozero
-      apt:
-        name: python-gpiozero
-        state: present
         
   handlers:
     - name: Restart ssh
