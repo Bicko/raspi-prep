@@ -84,7 +84,7 @@
         remove: yes
         force: yes
         
-    - name: Only run "update_cache=yes" if the last one is more than 3600 seconds ago
+    - name: Only run "update_cache=yes" if the last one is more than 3600 seconds (1 hr) ago
       apt:
         update_cache: yes
         cache_valid_time: 3600
@@ -98,26 +98,7 @@
         - mysql-server
         - python-mysqldb
         - python3-mysqldb
-        
-    - name: Set MySQL root password
-      mysql_user:
-        name: root
-        password: '$6$ZbWanugns2E$6FeGCSWq97yivD1OZEMPPPWqEzhn.5GbvU4HEe.ohb7lXp3Dz5PcFWggdFh9.d/uvWr9Fbp4XiET2vahDALDY.'
-        host: localhost
-        
-    - name: Removes all anonymous MySQL user accounts
-      mysql_user:
-        name: ''
-        host_all: yes
-        state: absent
-        
-    - name: Create MySQL user with all database privileges
-      mysql_user:
-        name: python
-        password: python
-        priv: '*.*:ALL'
-        state: present
-      
+              
         
   handlers:
     - name: Restart ssh
