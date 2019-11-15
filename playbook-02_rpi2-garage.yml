@@ -4,11 +4,17 @@
   become: yes
   
   tasks:
-    - name: "Ensure group mandj exists"
+    - name: Create group mandj
       group:
         name: mandj
         gid: 1002
         state: present
+        
+    - name: Create group gpio
+      group:
+        name: gpio
+        state: present
+        system: yes
 
     - name: Create a user account for Mike
       user:
@@ -16,7 +22,7 @@
         uid: 1969
         group: mandj
         password: '$6$ZbWanugns2E$6FeGCSWq97yivD1OZEMPPPWqEzhn.5GbvU4HEe.ohb7lXp3Dz5PcFWggdFh9.d/uvWr9Fbp4XiET2vahDALDY.'
-        groups: adm, dialout, cdrom, floppy, sudo, audio, dip, video, plugdev, netdev, lxd
+        groups: adm, dialout, cdrom, floppy, sudo, audio, dip, video, plugdev, netdev, lxd, gpio
         append: yes
         state: present
         shell: /bin/bash
