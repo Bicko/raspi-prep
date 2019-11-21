@@ -94,10 +94,6 @@
         pkg:
         - python3-gpiozero
         - python-gpiozero
-        - mysql-client
-        - mysql-server
-        - python-mysqldb
-        - python3-mysqldb
               
         
   handlers:
