@@ -1,5 +1,11 @@
 #!/bin/bash
 
+# Running as root?
+if [ "$(id -u)" != "0" ] ; then
+  echo "Please run this as root." 1>&2
+  exit 1
+fi
+
 #Install Ansible, if not already installed
 test ! -f /usr/local/bin/ansible && apt -y install python-pip && pip install ansible
 
