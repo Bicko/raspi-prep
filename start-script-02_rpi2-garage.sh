@@ -1,14 +1,13 @@
 #!/bin/bash
 
-#Install Ansible
-apt -y install python-pip
-pip install ansible
+#Install Ansible, if not already installed
+test ! -f /usr/local/bin/ansible && apt -y install python-pip && pip install ansible
 
 #add-apt-repository -y ppa:ubuntu-pi-flavour-makers/ppa
 #apt-get update
 
-#Install git
-apt -y install git
+#Install git, if not already installed
+test ! -f /usr/bin/git && apt -y install git
 
 #Get the repo, if not already present
 cd ~
