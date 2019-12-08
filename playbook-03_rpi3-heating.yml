@@ -1,0 +1,104 @@
+---
+- hosts: localhost
+  connection: local
+  become: yes
+  
+  tasks:
+    - name: Create group mandj
+      group:
+        name: mandj
+        gid: 1002
+        state: present
+        
+    - name: Create group gpio
+      group:
+        name: gpio
+        state: present
+        system: yes
+
+    - name: Create a user account for Mike
+      user:
+        name: mike
+        uid: 1969
+        group: mandj
+        password: '$6$ZbWanugns2E$6FeGCSWq97yivD1OZEMPPPWqEzhn.5GbvU4HEe.ohb7lXp3Dz5PcFWggdFh9.d/uvWr9Fbp4XiET2vahDALDY.'
+        groups: adm, dialout, cdrom, floppy, sudo, audio, dip, video, plugdev, netdev, lxd, gpio
+        append: yes
+        state: present
+        shell: /bin/bash
+        system: no
+        create_home: yes
+
+    - name: Set Mike's authorized_key for X200
+      authorized_key:
+        user: mike
+        state: present
+        key: 'ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDIELda1s1OlsuYJK3lrYVLX6fQytK4H9/lNXBlRIrM+aYR0xvMfzYtr2k0JFAaX53PUMuPgIO/qqYK3DjwUtqfeBlYuqVsCvUUxLMfUM4u1sxYHxmI/PVSh02SrwvV4cibCr0ni1SW22j4+k7K34jm1CQeI5e5+ZlcbYL4jThNK8JXwLhOB3/VBdicj+Z66uWAtcPZ67Z7w0wpEnuO5jfTphRoBzL+DeJhYmdipfFOlqaRuzQ/raNwyBqDSy92k01w+vzDnQOSq1nsXE8femzBEmV2Y0M5XxAn50Hbtt5A6oaaLO8xObkaQrmQpEfUsC63jU1z6e7iN7lLQcdp9DCN mike@X200'
+      
+    - name: Set Mike's authorized_key for PineBookPro
+      authorized_key:
+        user: mike
+        state: present  
+        key: 'ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC1Qsji4M/UXHerft05HMTfxl1F0GBLaetaaqHvrQkmb2jaZMpIfh0WCYEf2PwZC0kY/2Ex1PQ8R9ZLZHEqkOmJ1ZXcmbwTo0k6Zx4wrNGl7KPWfLPCDTi/zT25ZEe+gZqZgpvF8gdUpyiXEf60mz8uvC54IRjpILEgXxfugpN9qcmW0C3lFcUTFKfXV3ZCjwZ6urL3qdWfyIjKzZ667M1gsyvzxllmBchrPBcnWySGP0SZ8O049Sqa50QoLAaPLeX15w6ELCTVVJEQeQ8mFw0HfPL91ceg3vy1IJuBFOzSA8ZtUM5nZgv+axY3Hx9yU/oTRGJmTQKKVXaqlZqlCKTV rock@Debian-Desktop'
+
+    - name: Set Mike's authorized_key for rpi11
+      authorized_key:
+        user: mike
+        state: present  
+        key: 'ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCtT6uZEnxcZaI5SoO1m6tip/22Q8Rr+46cPvnIHCokzVBPLwZQQtWSrYj6ethAvT9c86oRv+m3E5IW+EHRpJrBHhYq0ZtKdmRd1xip2+LXaIJeVccIkPImV8oRbxgq53m2zZxnD7Z5BCxGbUqmDgezd8XiUCqGX4Rnu7tngdVwRJGgUFJ1gnBNwd+C0kLkbVRINRY3GUBKeMHmGD6tNkxHy5JLZci66Fw/+lJwr8bPKGNusiNKUDoAjwvTlbFNnrALGp0hMQ3ivfYrUxvV8/v8fxOswV6yocgb7f5QzKpFi7Uy9M+QGBEjbRNfRj8p3XbUnIyq2oDgIMybhu892Rgd pi@rpi11.orchard'
+
+    - name: Set hostname
+      hostname:
+        name: garage.orchard
+     
+    - name: "Change SSH port number"
+      lineinfile:
+        dest: "/etc/ssh/sshd_config"
+        regexp: "^Port"
+        line: "Port 7056"
+      notify: Restart ssh
+      
+    - name: Disallow password authentication
+      lineinfile:
+        dest: "/etc/ssh/sshd_config"
+        regexp: "^PasswordAuthentication"
+        line: "PasswordAuthentication no"
+        state: present
+      notify: Restart ssh
+
+    - name: Disallow root SSH access
+      lineinfile:
+        dest: "/etc/ssh/sshd_config"
+        regexp: "^PermitRootLogin"
+        line: "PermitRootLogin no"
+        state: present
+      notify: Restart ssh
+  
+    - name: Set timezone
+      timezone:
+        name: Europe/London
+ 
+    - name: Delete user account 'ubuntu'
+      user:
+        name: ubuntu
+        state: absent
+        remove: yes
+        force: yes
+        
+    - name: Only run "update_cache=yes" if the last one is more than 3600 seconds (1 hr) ago
+      apt:
+        update_cache: yes
+        cache_valid_time: 3600
+        
+    - name: Install packages
+      apt:
+        pkg:
+        - python3-gpiozero
+        - python-gpiozero
+              
+        
+  handlers:
+    - name: Restart ssh
+      service:
+        name: ssh
+        state: restarted
