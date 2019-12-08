@@ -1,5 +1,5 @@
 # raspi-prep
-A collection of scripts to prepare a Raspberry Pi.
+## A collection of scripts to prepare a Raspberry Pi.
 
 Beware: Some of these scripts build using Ubuntu Server, and some expect Raspbian!
 Method:
@@ -9,4 +9,4 @@ Method:
 4. Put the SD card into the RPi and boot it.
 5. SSH to the freshly booted RPi, with default credentials
 6. Run the following:
-curl -sL https://raw.githubusercontent.com/Bicko/raspi-prep/master/start-script-03_rpi3-heating.sh | sudo bash
+**curl -sL https://raw.githubusercontent.com/Bicko/raspi-prep/master/start-script-03_rpi3-heating.sh | sudo bash**
