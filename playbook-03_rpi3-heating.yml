@@ -50,6 +50,11 @@
     - name: Set hostname
       hostname:
         name: heating.orchard
+    - name: Ensure hosts file has correct hostname too
+      lineinfile:
+        path: /etc/hosts
+        regexp: '^127\.0\.1\.1'
+        line: 127.0.1.1 heating.orchard
      
     - name: "Change SSH port number"
       lineinfile:
