@@ -49,7 +49,7 @@
 
     - name: Set hostname
       hostname:
-        name: garage.orchard
+        name: heating.orchard
      
     - name: "Change SSH port number"
       lineinfile:
