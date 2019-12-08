@@ -96,6 +96,7 @@
         - python3-gpiozero
         - python-gpiozero
         - tmux
+        - vim
               
         
   handlers:
