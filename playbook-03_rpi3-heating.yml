@@ -95,6 +95,7 @@
         pkg:
         - python3-gpiozero
         - python-gpiozero
+        - tmux
               
         
   handlers:
