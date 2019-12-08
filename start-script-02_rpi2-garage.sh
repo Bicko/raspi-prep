@@ -6,6 +6,9 @@ if [ "$(id -u)" != "0" ] ; then
   exit 1
 fi
 
+# Must update repo list first!
+apt update
+
 #Install Ansible, if not already installed
 test ! -f /usr/local/bin/ansible && apt -y install python-pip && pip install ansible
 
