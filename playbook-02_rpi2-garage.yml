@@ -53,6 +53,13 @@
         state: present  
         key: 'ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQCu3N2XI9dUvWembGKEpMO5jay9m5i5OYc3YpZ+AHp5ae2+JrAvSbkKo7U2imyzBbcKUI85bJt5jsETuSmc/3K1cR/18VLAVa37mSbUw1KdsXXTSg9fsAUY9+422+QPRMoiMTj23rFARTDIbxG95hlCrHuNWsi9nnqhQ4KuZ87/rLNG91XtIJAODhdhAvWW7uLBHOb0G9I8eKG5kXBiPOvku57TtCxJsl4r1DWjwFZS6g3/DCzPenitvIpxEn3rxcEVtRoMOHcy96rhFdnDUI7zM9t5yXD7RapK8qwYEnUm2d2WAS7WR5iAQYswOiWaXGhiEfD42oONLT73WPmQ24stW30Hw+XxEJRxCBXWWfVU7GO1+BKxGL+U9L/CD0qbzGKKmsf6Jy4LEikc1jmBdv0jsrSSZlQXyQgePGxwoo4Qv/Dv0VPuZ3Bx6SyPzdYj1DIjqz7CZKTlDAGpnfOqaYz/1MLjn2wTw3CijUiXgTH8N7MN7mPM9/5hnyTyw1U3EDc= u0_a78@localhost'
 
+
+    - name: Set Mike's authorized_key for wsl
+      authorized_key:
+        user: mike
+        state: present  
+        key: 'ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDYS3GwNSZhDav8e90goZU1lJKFh1wJ77Rxn5qiXyMZpO+Y1ZX+NhzBLZjgvct8uxpq8weTy9l3bMgHhm8dcdT6mH/E7kPFphCfKugtvJGm/NUqP2g/KdEngpDlymi3bAOOmShLolkwnzAji0+KlRqu13dlZAmjZr8erNsunQu3MqtpdlOhhNi2O1ybiiiHThSFR0DPYx+n27pimCS37DELdClKDc2f9yofnk80NXXwzbmrX/vgOiuPW69rWhFsVJK72q4AXN5PvlK9hNiAr3gy3s/SfP1dNrqw0410YVHJH4C3SCWSAt3MOVbVoMskOMpzJiZQaI8ByjpuXJ/2zXK3 mike@WS-007879'
+
     - name: Set hostname
       hostname:
         name: garage.orchard
