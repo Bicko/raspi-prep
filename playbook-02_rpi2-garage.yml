@@ -90,12 +90,12 @@
       timezone:
         name: Europe/London
  
-    - name: Delete user account 'ubuntu'
-      user:
-        name: ubuntu
-        state: absent
-        remove: yes
-        force: yes
+#    - name: Delete user account 'ubuntu'
+#      user:
+#        name: ubuntu
+#        state: absent
+#        remove: yes
+#        force: yes
         
     - name: Only run "update_cache=yes" if the last one is more than 3600 seconds (1 hr) ago
       apt:
