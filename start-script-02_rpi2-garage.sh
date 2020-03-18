@@ -10,7 +10,7 @@ fi
 apt update
 
 #Install Ansible, if not already installed
-test ! -f /usr/local/bin/ansible && apt -y install python-pip && pip install ansible
+test ! -f /usr/local/bin/ansible && apt -y install python3-pip && pip3 install ansible
 
 #add-apt-repository -y ppa:ubuntu-pi-flavour-makers/ppa
 #apt-get update
