@@ -107,8 +107,8 @@
         pkg:
         - python3-gpiozero
         
-    - name: Reboot the machine
-      reboot:
+#    - name: Reboot the machine
+#      reboot:
         
   handlers:
     - name: Restart ssh
