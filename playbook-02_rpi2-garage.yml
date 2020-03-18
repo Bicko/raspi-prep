@@ -53,7 +53,6 @@
         state: present  
         key: 'ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQCu3N2XI9dUvWembGKEpMO5jay9m5i5OYc3YpZ+AHp5ae2+JrAvSbkKo7U2imyzBbcKUI85bJt5jsETuSmc/3K1cR/18VLAVa37mSbUw1KdsXXTSg9fsAUY9+422+QPRMoiMTj23rFARTDIbxG95hlCrHuNWsi9nnqhQ4KuZ87/rLNG91XtIJAODhdhAvWW7uLBHOb0G9I8eKG5kXBiPOvku57TtCxJsl4r1DWjwFZS6g3/DCzPenitvIpxEn3rxcEVtRoMOHcy96rhFdnDUI7zM9t5yXD7RapK8qwYEnUm2d2WAS7WR5iAQYswOiWaXGhiEfD42oONLT73WPmQ24stW30Hw+XxEJRxCBXWWfVU7GO1+BKxGL+U9L/CD0qbzGKKmsf6Jy4LEikc1jmBdv0jsrSSZlQXyQgePGxwoo4Qv/Dv0VPuZ3Bx6SyPzdYj1DIjqz7CZKTlDAGpnfOqaYz/1MLjn2wTw3CijUiXgTH8N7MN7mPM9/5hnyTyw1U3EDc= u0_a78@localhost'
 
-
     - name: Set Mike's authorized_key for wsl
       authorized_key:
         user: mike
@@ -107,8 +106,9 @@
       apt:
         pkg:
         - python3-gpiozero
-        - python-gpiozero
-              
+        
+    - name: Reboot the machine
+      reboot:
         
   handlers:
     - name: Restart ssh
