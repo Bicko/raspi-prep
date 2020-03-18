@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Kick this all off by running the following:
+# curl -sL https://raw.githubusercontent.com/Bicko/raspi-prep/master/start-script-02_rpi2-garage.sh | sudo bash
+
 # Running as root?
 if [ "$(id -u)" != "0" ] ; then
   echo "Please run this as root." 1>&2
