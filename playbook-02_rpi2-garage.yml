@@ -22,7 +22,7 @@
         uid: 1969
         group: mandj
         password: '$6$ZbWanugns2E$6FeGCSWq97yivD1OZEMPPPWqEzhn.5GbvU4HEe.ohb7lXp3Dz5PcFWggdFh9.d/uvWr9Fbp4XiET2vahDALDY.'
-        groups: adm, dialout, cdrom, floppy, sudo, audio, dip, video, plugdev, netdev, lxd, gpio
+        groups: adm, dialout, cdrom, floppy, sudo, audio, dip, video, plugdev, netdev, gpio
         append: yes
         state: present
         shell: /bin/bash
