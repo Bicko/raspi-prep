@@ -61,7 +61,7 @@
 
     - name: Set hostname
       hostname:
-        name: garage.orchard
+        name: garage
      
     - name: "Change SSH port number"
       lineinfile:
@@ -106,6 +106,8 @@
       apt:
         pkg:
         - python3-gpiozero
+        - tmux
+        - vim
         
 #    - name: Reboot the machine
 #      reboot:
