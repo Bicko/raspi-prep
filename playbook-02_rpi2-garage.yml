@@ -61,7 +61,13 @@
 
     - name: Set hostname
       hostname:
-        name: garage
+        name: garage.orchard
+    - name: Ensure hosts file has correct hostname too
+      lineinfile:
+        path: /etc/hosts
+        regexp: '^127\.0\.1\.1'
+        line: 127.0.1.1       garage.orchard
+     
      
     - name: "Change SSH port number"
       lineinfile:
