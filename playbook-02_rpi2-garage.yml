@@ -105,9 +105,13 @@
     - name: Install packages
       apt:
         pkg:
+        - python3
         - python3-gpiozero
         - tmux
         - vim
+        - mariadb-server
+        - mariadb-client
+        - python3-mysqldb
         
 #    - name: Reboot the machine
 #      reboot:
