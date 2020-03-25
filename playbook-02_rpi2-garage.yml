@@ -149,7 +149,6 @@
         path: /boot/config.txt
         regexp: 'dtparam *= *act_led_trigger *='
         line: dtparam=act_led_trigger=none
-        path: /boot/config.txt
         regexp: 'dtparam *= *act_led_activelow *='
         line: dtparam=act_led_activelow=off
 
@@ -158,7 +157,6 @@
         path: /boot/config.txt
         regexp: 'dtparam *= *pwr_led_trigger *='
         line: dtparam=pwr_led_trigger=none
-        path: /boot/config.txt
         regexp: 'dtparam *= *pwr_led_activelow *='
         line: dtparam=pwr_led_activelow=on
 
