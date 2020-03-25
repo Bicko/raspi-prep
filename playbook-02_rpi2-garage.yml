@@ -153,7 +153,7 @@
         - { regexp: 'dtparam *= *act_led_trigger *=', line: 'dtparam=act_led_trigger=none' }
         - { regexp: 'dtparam *= *act_led_activelow *=', line: 'dtparam=act_led_activelow=off' }
         - { regexp: 'dtparam *= *pwr_led_trigger *=', line: 'dtparam=pwr_led_trigger=none' }
-        - { regexp: 'dtparam *= *pwr_led_activelow *=', line: 'dtparam=pwr_led_activelow=on' }
+        - { regexp: 'dtparam *= *pwr_led_activelow *=', line: 'dtparam=pwr_led_activelow=off' }
 
   handlers:
     - name: Restart ssh
