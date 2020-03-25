@@ -68,7 +68,6 @@
         regexp: '^127\.0\.1\.1'
         line: 127.0.1.1       garage.orchard
      
-     
     - name: "Change SSH port number"
       lineinfile:
         dest: "/etc/ssh/sshd_config"
@@ -126,6 +125,11 @@
         
 #    - name: Reboot the machine
 #      reboot:
+
+    - name: Adjust RPi settings in /boot/config.txt
+      lineinfile:
+        path: /boot/config.txt
+        line: dtoverlay=w1-gpio
         
   handlers:
     - name: Restart ssh
