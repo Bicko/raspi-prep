@@ -122,6 +122,9 @@
         - mariadb-server
         - mariadb-client
         - python3-mysqldb
+        - nmap
+        - mtr
+        - whois
         
 #    - name: Reboot the machine
 #      reboot:
