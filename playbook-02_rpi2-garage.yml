@@ -126,11 +126,21 @@
 #    - name: Reboot the machine
 #      reboot:
 
-    - name: Adjust RPi settings in /boot/config.txt
+    - name: RPi - enable UART
+      lineinfile:
+        path: /boot/config.txt
+        line: enable_uart=1
+
+    - name: RPi - enable One-wire port
       lineinfile:
         path: /boot/config.txt
         line: dtoverlay=w1-gpio
-        
+
+    - name: RPi - enable SPI
+      lineinfile:
+        path: /boot/config.txt
+        line: dtparam=spi=on
+
   handlers:
     - name: Restart ssh
       service:
