@@ -128,6 +128,7 @@
         - mc
         - htop
         - ncdu
+        - mutt
         
 #    - name: Reboot the machine
 #      reboot:
