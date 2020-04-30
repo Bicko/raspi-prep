@@ -38,8 +38,8 @@
     - name: Set Mike's authorized_key for PineBookPro
       authorized_key:
         user: mike
-        state: present  
-        key: 'ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC1Qsji4M/UXHerft05HMTfxl1F0GBLaetaaqHvrQkmb2jaZMpIfh0WCYEf2PwZC0kY/2Ex1PQ8R9ZLZHEqkOmJ1ZXcmbwTo0k6Zx4wrNGl7KPWfLPCDTi/zT25ZEe+gZqZgpvF8gdUpyiXEf60mz8uvC54IRjpILEgXxfugpN9qcmW0C3lFcUTFKfXV3ZCjwZ6urL3qdWfyIjKzZ667M1gsyvzxllmBchrPBcnWySGP0SZ8O049Sqa50QoLAaPLeX15w6ELCTVVJEQeQ8mFw0HfPL91ceg3vy1IJuBFOzSA8ZtUM5nZgv+axY3Hx9yU/oTRGJmTQKKVXaqlZqlCKTV rock@Debian-Desktop'
+        state: present
+        key: 'ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILislSjlQPHgPlLimVZECJ/hTIVT81pIUPoBStOx8qjY rock@Debian-Desktop'
 
     - name: Set Mike's authorized_key for rpi11
       authorized_key:
@@ -55,12 +55,12 @@
 
     - name: Set hostname
       hostname:
-        name: testbed.orchard
+        name: rpizw.orchard
     - name: Ensure hosts file has correct hostname too
       lineinfile:
         path: /etc/hosts
         regexp: '^127\.0\.1\.1'
-        line: 127.0.1.1       testbed.orchard
+        line: 127.0.1.1       rpizw.orchard
      
     - name: "Change SSH port number"
       lineinfile:
@@ -88,13 +88,18 @@
     - name: Set timezone
       timezone:
         name: Europe/London
+        
+    - name: Set GB locale
+      locale_gen:
+        name: en_GB.UTF-8
+        state: present
  
-    - name: Delete user account 'pi'
-      user:
-        name: pi
-        state: absent
-        remove: yes
-        force: yes
+#    - name: Delete user account 'pi'
+#      user:
+#        name: pi
+#        state: absent
+#        remove: yes
+#        force: yes
         
     - name: Only run "update_cache=yes" if the last one is more than 3600 seconds (1 hr) ago
       apt:
@@ -104,11 +109,40 @@
     - name: Install packages
       apt:
         pkg:
+        - python3
+        - python3-pip
         - python3-gpiozero
-        - python-gpiozero
+        - python3-matplotlib
         - tmux
         - vim
-              
+        - mariadb-server
+        - mariadb-client
+        - python3-mysqldb
+        - nmap
+        - mtr
+        - whois
+        - mc
+        - htop
+        - ncdu
+        - mutt
+  
+    - name: RPi - enable UART
+      lineinfile:
+        path: /boot/config.txt
+        regexp: 'enable_uart *='
+        line: enable_uart=1
+
+    - name: RPi - enable One-wire interface
+      lineinfile:
+        path: /boot/config.txt
+        regexp: 'dtoverlay *= *w1-gpio'
+        line: dtoverlay=w1-gpio
+
+    - name: RPi - enable SPI
+      lineinfile:
+        path: /boot/config.txt
+        regexp: 'dtparam *= *spi *='
+        line: dtparam=spi=on
         
   handlers:
     - name: Restart ssh
