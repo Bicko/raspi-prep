@@ -93,14 +93,7 @@
       locale_gen:
         name: en_GB.UTF-8
         state: present
- 
-#    - name: Delete user account 'pi'
-#      user:
-#        name: pi
-#        state: absent
-#        remove: yes
-#        force: yes
-        
+
     - name: Only run "update_cache=yes" if the last one is more than 3600 seconds (1 hr) ago
       apt:
         update_cache: yes
@@ -143,7 +136,17 @@
         path: /boot/config.txt
         regexp: 'dtparam *= *spi *='
         line: dtparam=spi=on
-        
+
+    - name: Delete user account 'pi'
+      user:
+        name: pi
+        state: absent
+        remove: yes
+        force: yes
+
+    - name: Reboot the machine
+      reboot:
+
   handlers:
     - name: Restart ssh
       service:
