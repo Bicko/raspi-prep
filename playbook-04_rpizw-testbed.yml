@@ -144,8 +144,8 @@
         remove: yes
         force: yes
 
-    - name: Reboot the machine
-      reboot:
+#    - name: Reboot the machine
+#      reboot:
 
   handlers:
     - name: Restart ssh
