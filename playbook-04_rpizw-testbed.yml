@@ -138,6 +138,12 @@
         regexp: 'dtparam *= *spi *='
         line: dtparam=spi=on
 
+    - name: RPi - enable I2C
+      lineinfile:
+        path: /boot/config.txt
+        regexp: 'dtparam *= *i2c_arm *='
+        line: dtparam=i2c_arm=on
+
     - name: Delete user account 'pi'
       user:
         name: pi
