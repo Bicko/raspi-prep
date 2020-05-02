@@ -118,6 +118,7 @@
         - htop
         - ncdu
         - mutt
+        - i2c-tools
   
     - name: RPi - enable UART
       lineinfile:
