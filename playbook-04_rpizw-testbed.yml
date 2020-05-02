@@ -119,6 +119,7 @@
         - ncdu
         - mutt
         - i2c-tools
+        - magic-wormhole
   
     - name: RPi - enable UART
       lineinfile:
