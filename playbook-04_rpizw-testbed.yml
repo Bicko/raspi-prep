@@ -106,6 +106,7 @@
         - python3-pip
         - python3-gpiozero
         - python3-matplotlib
+        - python3-smbus
         - tmux
         - vim
         - mariadb-server
