@@ -61,12 +61,12 @@
 
     - name: Set hostname
       hostname:
-        name: rpizw.orchard
+        name: sentry.orchard
     - name: Ensure hosts file has correct hostname too
       lineinfile:
         path: /etc/hosts
         regexp: '^127\.0\.1\.1'
-        line: 127.0.1.1       rpizw.orchard
+        line: 127.0.1.1       sentry.orchard
      
     - name: "Change SSH port number"
       lineinfile:
