@@ -129,6 +129,7 @@
         - mutt
         - i2c-tools
         - magic-wormhole
+        - wavemon
   
     - name: RPi - enable UART
       lineinfile:
@@ -136,11 +137,11 @@
         regexp: 'enable_uart *='
         line: enable_uart=1
 
-    - name: RPi - enable One-wire interface
-      lineinfile:
-        path: /boot/config.txt
-        regexp: 'dtoverlay *= *w1-gpio'
-        line: dtoverlay=w1-gpio
+#    - name: RPi - enable One-wire interface
+#      lineinfile:
+#        path: /boot/config.txt
+#        regexp: 'dtoverlay *= *w1-gpio'
+#        line: dtoverlay=w1-gpio
 
     - name: RPi - enable SPI
       lineinfile:
@@ -154,17 +155,17 @@
         regexp: 'dtparam *= *i2c_arm *='
         line: dtparam=i2c_arm=on
 
-    - name: RPi - disable ACT LED (RPi Zero)
-      lineinfile:
-        path: /boot/config.txt
-        regexp: 'dtparam *= *act_led_trigger *='
-        line: dtparam=act_led_trigger=none
-        
-#    - name: RPi - make ACT LED active low (RPi Zero)
+#    - name: RPi - disable ACT LED (RPi Zero)
 #      lineinfile:
 #        path: /boot/config.txt
-#        regexp: 'dtparam *= *act_led_activelow *='
-#        line: dtparam=act_led_activelow=on
+#        regexp: 'dtparam *= *act_led_trigger *='
+#        line: dtparam=act_led_trigger=none
+        
+    - name: RPi - make ACT LED active low (RPi Zero)
+      lineinfile:
+        path: /boot/config.txt
+        regexp: 'dtparam *= *act_led_activelow *='
+        line: dtparam=act_led_activelow=on
 
     - name: Delete user account 'pi'
       user:
