@@ -130,6 +130,7 @@
         - i2c-tools
         - magic-wormhole
         - wavemon
+        - cmake
   
     - name: RPi - enable UART
       lineinfile:
