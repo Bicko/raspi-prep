@@ -154,6 +154,12 @@
         dest: /usr/local/bin/docker-compose
         mode: '0755'
         
+    - name: Download reboot check script
+      get_url:
+        url: https://raw.githubusercontent.com/Bicko/vps-provisioning/master/is-reboot-required.sh
+        dest: /home/mike/scripts/is-reboot-required.sh
+        mode: '0755'
+        
 #    - name: Reboot the machine
 #      reboot:
 
