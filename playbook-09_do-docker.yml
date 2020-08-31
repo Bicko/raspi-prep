@@ -123,6 +123,7 @@
         - htop
         - ncdu
         - magic-wormhole
+        - sshguard
         - python3-apt
         - apt-transport-https
         - ca-certificates
