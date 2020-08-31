@@ -172,7 +172,7 @@
 
     - name: apt-get upgrade
       apt:
-        upgrade: full
+        upgrade: dist
         force_apt_get: yes
         
     - name: apt-get autoremove
