@@ -112,7 +112,18 @@
         - htop
         - ncdu
         - magic-wormhole
-  
+        - python3-apt
+        - apt-transport-https
+        - ca-certificates
+        - curl
+        - gnupg-agent
+        - software-properties-common
+    - name: Add Docker’s official GPG key
+      apt_key:
+        id: 9DC858229FC7DD38854AE2D88D81803C0EBFCD88
+        url: https://download.docker.com/linux/ubuntu/gpg
+        state: present
+    
 #    - name: Reboot the machine
 #      reboot:
 
