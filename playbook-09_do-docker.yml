@@ -128,7 +128,10 @@
         repo: deb [arch=amd64] https://download.docker.com/linux/ubuntu focal stable
         state: present
     - name: Update apt
-      apt: update_cache=yes force_apt_get=yes
+      apt:
+        update_cache: yes
+        force_apt_get: yes
+        
     - name: Install Docker
       apt:
         pkg:
