@@ -124,7 +124,7 @@
         url: https://download.docker.com/linux/ubuntu/gpg
         state: present
     - name: Add Docker repository into sources list.
-      - apt_repository:
+      apt_repository:
         repo: deb [arch=amd64] https://download.docker.com/linux/ubuntu focal stable
         state: present
     - name: Update apt
