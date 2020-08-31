@@ -124,6 +124,18 @@
         - gnupg-agent
         - software-properties-common
         
+    - name: Create scripts subdirectory
+      file:
+        path: /home/mike/scripts
+        state: directory
+        mode: '0755'
+
+    - name: Download reboot check script
+      get_url:
+        url: https://raw.githubusercontent.com/Bicko/vps-provisioning/master/is-reboot-required.sh
+        dest: /home/mike/scripts/is-reboot-required.sh
+        mode: '0755'
+        
     - name: Add Docker’s official GPG key
       apt_key:
         id: 9DC858229FC7DD38854AE2D88D81803C0EBFCD88
@@ -152,12 +164,6 @@
       get_url:
         url: https://github.com/docker/compose/releases/download/1.26.2/docker-compose-Linux-x86_64
         dest: /usr/local/bin/docker-compose
-        mode: '0755'
-        
-    - name: Download reboot check script
-      get_url:
-        url: https://raw.githubusercontent.com/Bicko/vps-provisioning/master/is-reboot-required.sh
-        dest: /home/mike/scripts/is-reboot-required.sh
         mode: '0755'
         
 #    - name: Reboot the machine
