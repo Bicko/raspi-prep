@@ -10,19 +10,13 @@
         gid: 1002
         state: present
         
-    - name: Create group gpio
-      group:
-        name: gpio
-        state: present
-        system: yes
-
     - name: Create a user account for Mike
       user:
         name: mike
         uid: 1969
         group: mandj
         password: '$6$ZbWanugns2E$6FeGCSWq97yivD1OZEMPPPWqEzhn.5GbvU4HEe.ohb7lXp3Dz5PcFWggdFh9.d/uvWr9Fbp4XiET2vahDALDY.'
-        groups: adm, dialout, cdrom, sudo, audio, video, plugdev, games, users, input, netdev, gpio, i2c, spi
+        groups: adm, dialout, cdrom, sudo, audio, video, plugdev, games, users, input, netdev
         append: yes
         state: present
         shell: /bin/bash
@@ -33,7 +27,7 @@
       authorized_key:
         user: mike
         state: present
-        key: 'ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDIELda1s1OlsuYJK3lrYVLX6fQytK4H9/lNXBlRIrM+aYR0xvMfzYtr2k0JFAaX53PUMuPgIO/qqYK3DjwUtqfeBlYuqVsCvUUxLMfUM4u1sxYHxmI/PVSh02SrwvV4cibCr0ni1SW22j4+k7K34jm1CQeI5e5+ZlcbYL4jThNK8JXwLhOB3/VBdicj+Z66uWAtcPZ67Z7w0wpEnuO5jfTphRoBzL+DeJhYmdipfFOlqaRuzQ/raNwyBqDSy92k01w+vzDnQOSq1nsXE8femzBEmV2Y0M5XxAn50Hbtt5A6oaaLO8xObkaQrmQpEfUsC63jU1z6e7iN7lLQcdp9DCN mike@X200'
+        key: 'ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIMmKwyb5Wg4lCZMulRAclBOJS6Ukxmv0MTmRIAR/OLIi mike@X200'
       
     - name: Set Mike's authorized_key for PineBookPro
       authorized_key:
@@ -61,12 +55,12 @@
 
     - name: Set hostname
       hostname:
-        name: flirc.orchard
+        name: docker
     - name: Ensure hosts file has correct hostname too
       lineinfile:
         path: /etc/hosts
         regexp: '^127\.0\.1\.1'
-        line: 127.0.1.1       flirc.orchard
+        line: 127.0.1.1       docker
      
     - name: "Change SSH port number"
       lineinfile:
@@ -108,17 +102,8 @@
     - name: Install packages
       apt:
         pkg:
-        - python3
-        - python3-pip
-        - python3-gpiozero
-        - python3-matplotlib
-        - python3-smbus
-        - python3-picamera
         - tmux
         - vim
-        - mariadb-server
-        - mariadb-client
-        - python3-mysqldb
         - nmap
         - arp-scan
         - mtr
@@ -126,54 +111,8 @@
         - mc
         - htop
         - ncdu
-        - mutt
-        - i2c-tools
         - magic-wormhole
-        - wavemon
   
-    - name: RPi - enable UART
-      lineinfile:
-        path: /boot/config.txt
-        regexp: 'enable_uart *='
-        line: enable_uart=1
-
-#    - name: RPi - enable One-wire interface
-#      lineinfile:
-#        path: /boot/config.txt
-#        regexp: 'dtoverlay *= *w1-gpio'
-#        line: dtoverlay=w1-gpio
-
-    - name: RPi - enable SPI
-      lineinfile:
-        path: /boot/config.txt
-        regexp: 'dtparam *= *spi *='
-        line: dtparam=spi=on
-
-    - name: RPi - enable I2C
-      lineinfile:
-        path: /boot/config.txt
-        regexp: 'dtparam *= *i2c_arm *='
-        line: dtparam=i2c_arm=on
-
-#    - name: RPi - disable ACT LED (RPi Zero)
-#      lineinfile:
-#        path: /boot/config.txt
-#        regexp: 'dtparam *= *act_led_trigger *='
-#        line: dtparam=act_led_trigger=none
-        
-    - name: RPi - make ACT LED active low (RPi Zero)
-      lineinfile:
-        path: /boot/config.txt
-        regexp: 'dtparam *= *act_led_activelow *='
-        line: dtparam=act_led_activelow=on
-
-    - name: Delete user account 'pi'
-      user:
-        name: pi
-        state: absent
-        remove: yes
-        force: yes
-
 #    - name: Reboot the machine
 #      reboot:
 
