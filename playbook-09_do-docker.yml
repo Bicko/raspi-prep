@@ -9,6 +9,10 @@
         name: mandj
         gid: 1002
         state: present
+    - name: Create group docker
+      group:
+        name: docker
+        state: present
         
     - name: Create a user account for Mike
       user:
