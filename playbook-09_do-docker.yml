@@ -196,6 +196,13 @@
         mode: '0644'
         owner: mike
         group: mandj
+    - name: Create Apache logs subdirectory
+      file:
+        path: /var/www/logs
+        state: directory
+        mode: '0755'
+        owner: mike
+        group: mandj
         
     - name: Create directories for clever.bicko.tech
       file:
