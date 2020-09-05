@@ -130,6 +130,7 @@
         - curl
         - gnupg-agent
         - software-properties-common
+        - apache2
         
     - name: Create scripts subdirectory
       file:
