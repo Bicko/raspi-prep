@@ -201,8 +201,15 @@
         path: /var/www/logs
         state: directory
         mode: '0755'
-        owner: mike
-        group: mandj
+        owner: root
+        group: root
+    - name: Set Apache virtual host file for clever.bicko.tech
+      get_url:
+        url: https://raw.githubusercontent.com/Bicko/vps-provisioning/master/clever.bicko.tech.vhost
+        dest: /etc/apache2/sites-available/clever.bicko.tech.conf
+        mode: '0644'
+        owner: root
+        group: root
         
     - name: Create directories for clever.bicko.tech
       file:
