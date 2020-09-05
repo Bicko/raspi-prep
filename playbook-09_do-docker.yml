@@ -210,9 +210,10 @@
         mode: '0644'
         owner: root
         group: root
-    - apache2_module:
-      state: present
-      name: proxy
+    - name: Enable proxy module
+      apache2_module:
+        state: present
+        name: proxy
     - name: Enable rewrite module
       shell: /usr/sbin/a2enmod rewrite
       notify: Reload Apache
