@@ -198,7 +198,7 @@
         group: mandj
     - name: Create Apache logs subdirectory
       file:
-        path: /var/www/logs
+        path: /var/www/logs/clever.bicko.tech
         state: directory
         mode: '0755'
         owner: root
