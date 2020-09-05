@@ -187,9 +187,11 @@
       apt:
         autoremove: yes
         
-    - name: Create directory for clever.bicko.tech
+    - name: Create directories for clever.bicko.tech
       file:
-        path: /srv/www/docker/clever.bicko.tech/html
+        path:
+        - /srv/www/docker/clever.bicko.tech/html
+        - /srv/www/docker/clever.bicko.tech/logs
         state: directory
         mode: '0755'
         owner: mike
