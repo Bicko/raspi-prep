@@ -113,6 +113,7 @@
     - name: Install packages
       apt:
         pkg:
+        - tree
         - tmux
         - vim
         - nmap
@@ -188,6 +189,14 @@
       apt:
         autoremove: yes
         
+    - name: Set Apache default index.html
+      get_url:
+        url: https://raw.githubusercontent.com/Bicko/vps-provisioning/master/clever.bicko.tech.html
+        dest: /var/www/html/index.html
+        mode: '0644'
+        owner: mike
+        group: mandj
+        
     - name: Create directories for clever.bicko.tech
       file:
         path: "{{ item }}"
@@ -203,7 +212,7 @@
       get_url:
         url: https://raw.githubusercontent.com/Bicko/vps-provisioning/master/clever.bicko.tech.php
         dest: /srv/www/docker/clever.bicko.tech/html/index.php
-        mode: '0755'
+        mode: '0644'
         owner: mike
         group: mandj
         
@@ -211,7 +220,7 @@
       get_url:
         url: https://raw.githubusercontent.com/Bicko/vps-provisioning/master/clever.bicko.tech.yml
         dest: /srv/www/docker/clever.bicko.tech/html/docker-compose.yml
-        mode: '0755'
+        mode: '0644'
         owner: mike
         group: mandj
         
