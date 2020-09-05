@@ -210,6 +210,9 @@
         mode: '0644'
         owner: root
         group: root
+    - name: Enable new site
+      shell: /usr/sbin/a2ensite {{ http_conf }}
+      notify: Reload Apache
         
     - name: Create directories for clever.bicko.tech
       file:
@@ -246,3 +249,8 @@
       service:
         name: ssh
         state: restarted
+        
+    - name: Reload Apache
+      service:
+        name: apache2
+        state: reloaded
