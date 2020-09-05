@@ -189,13 +189,14 @@
         
     - name: Create directories for clever.bicko.tech
       file:
-        path:
-        - /srv/www/docker/clever.bicko.tech/html
-        - /srv/www/docker/clever.bicko.tech/logs
+        path: "{{ item }}"
         state: directory
         mode: '0755'
         owner: mike
         group: mandj
+      loop:
+        - /srv/www/docker/clever.bicko.tech/html
+        - /srv/www/docker/clever.bicko.tech/logs
         
     - name: Get docker-compose.yml for clever.bicko.tech
       get_url:
