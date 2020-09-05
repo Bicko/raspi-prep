@@ -210,6 +210,8 @@
         mode: '0644'
         owner: root
         group: root
+    - name: enabled mod_rewrite
+      apache2_module: name=rewrite state=present
     - name: Enable new site
       shell: /usr/sbin/a2ensite clever.bicko.tech.conf
       notify: Reload Apache
