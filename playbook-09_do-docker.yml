@@ -211,7 +211,7 @@
         owner: root
         group: root
     - name: Enable new site
-      shell: /usr/sbin/a2ensite {{ http_conf }}
+      shell: /usr/sbin/a2ensite clever.bicko.tech.conf
       notify: Reload Apache
         
     - name: Create directories for clever.bicko.tech
