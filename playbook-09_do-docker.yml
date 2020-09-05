@@ -198,6 +198,14 @@
         - /srv/www/docker/clever.bicko.tech/html
         - /srv/www/docker/clever.bicko.tech/logs
         
+    - name: Get index.php for clever.bicko.tech
+      get_url:
+        url: https://raw.githubusercontent.com/Bicko/vps-provisioning/master/clever.bicko.tech.php
+        dest: /srv/www/docker/clever.bicko.tech/html/index.php
+        mode: '0755'
+        owner: mike
+        group: mandj
+        
     - name: Get docker-compose.yml for clever.bicko.tech
       get_url:
         url: https://raw.githubusercontent.com/Bicko/vps-provisioning/master/clever.bicko.tech.yml
