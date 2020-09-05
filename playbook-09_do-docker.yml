@@ -189,7 +189,7 @@
         
     - name: Create directory for clever.bicko.tech
       file:
-        path: /srv/www/docker/clever.bicko.tech/code
+        path: /srv/www/docker/clever.bicko.tech/html
         state: directory
         mode: '0755'
         owner: mike
@@ -198,7 +198,7 @@
     - name: Get docker-compose.yml for clever.bicko.tech
       get_url:
         url: https://raw.githubusercontent.com/Bicko/vps-provisioning/master/clever.bicko.tech.yml
-        dest: /srv/www/docker/clever.bicko.tech/code/docker-compose.yml
+        dest: /srv/www/docker/clever.bicko.tech/html/docker-compose.yml
         mode: '0755'
         owner: mike
         group: mandj
