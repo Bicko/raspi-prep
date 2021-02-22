@@ -30,6 +30,11 @@
         shell: /bin/bash
         system: no
         create_home: yes
+        
+    - name: Install ssh server
+      apt:
+        pkg:
+        - openssh-server
 
     - name: Set Mike's authorized_key for X200
       authorized_key:
