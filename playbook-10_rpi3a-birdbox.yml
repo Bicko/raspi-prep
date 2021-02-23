@@ -264,5 +264,5 @@
   handlers:
     - name: Restart ssh
       service:
-        name: ssh
+        name: sshd
         state: restarted
