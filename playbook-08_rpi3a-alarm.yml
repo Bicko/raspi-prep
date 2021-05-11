@@ -144,11 +144,11 @@
         regexp: 'dtoverlay *= *w1-gpio'
         line: dtoverlay=w1-gpio
 
-    - name: RPi - enable SPI
+    - name: RPi - disable SPI
       lineinfile:
         path: /boot/config.txt
         regexp: 'dtparam *= *spi *='
-        line: dtparam=spi=on
+        line: dtparam=spi=off
 
     - name: RPi - enable I2C
       lineinfile:
