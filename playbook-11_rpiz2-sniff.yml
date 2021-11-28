@@ -3,7 +3,7 @@
   connection: local
   become: yes
   vars:
-    host_name: sniff
+    host_name: sniff.orchard
     
   tasks:
     - name: Create group mandj
@@ -161,6 +161,12 @@
         path: /boot/config.txt
         regexp: 'dtparam *= *i2c_arm *='
         line: dtparam=i2c_arm=on
+        
+    - name: RPi - disable ACT LED (RPi Zero)
+      lineinfile:
+        path: /boot/config.txt
+        regexp: 'dtparam *= *act_led_trigger *='
+        line: dtparam=act_led_trigger=none
 
     - name: RPi - make ACT LED active low (RPi Zero)
       lineinfile:
