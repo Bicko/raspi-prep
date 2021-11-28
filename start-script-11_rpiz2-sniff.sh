@@ -24,4 +24,4 @@ test ! -d raspi-prep && git clone https://github.com/Bicko/raspi-prep.git
 #Get latest yaml, etc
 cd raspi-prep && git pull
 
-ansible-playbook ~/raspi-prep/playbook-10_rpiz2-sniff.yml
+ansible-playbook ~/raspi-prep/playbook-11_rpiz2-sniff.yml
