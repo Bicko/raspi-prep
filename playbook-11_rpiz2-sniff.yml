@@ -179,6 +179,8 @@
         path: /etc/rc.local
         regexp: 'echo +[01] *\| *sudo +tee +/sys/class/leds/led0/brightness'
         line: echo 0 | sudo tee /sys/class/leds/led0/brightness
+        state: present
+        insertbefore: 'exit 0'
         
     - name: RPi - enable the camera interface
       lineinfile:
