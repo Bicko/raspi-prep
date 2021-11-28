@@ -159,16 +159,11 @@
         regexp: 'dtparam *= *i2c_arm *='
         line: dtparam=i2c_arm=on
 
-    - name: RPi - disable the ACT & PWR LEDs
+    - name: RPi - make ACT LED active low (RPi Zero)
       lineinfile:
         path: /boot/config.txt
-        regexp: "{{ item.regexp }}"
-        line: "{{ item.line }}"
-      with_items:
-        - { regexp: 'dtparam *= *act_led_trigger *=', line: 'dtparam=act_led_trigger=none' }
-        - { regexp: 'dtparam *= *act_led_activelow *=', line: 'dtparam=act_led_activelow=off' }
-        - { regexp: 'dtparam *= *pwr_led_trigger *=', line: 'dtparam=pwr_led_trigger=none' }
-        - { regexp: 'dtparam *= *pwr_led_activelow *=', line: 'dtparam=pwr_led_activelow=off' }
+        regexp: 'dtparam *= *act_led_activelow *='
+        line: dtparam=act_led_activelow=on
         
     - name: RPi - enable the camera interface
       lineinfile:
