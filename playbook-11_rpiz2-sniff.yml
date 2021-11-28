@@ -121,6 +121,9 @@
         - mc
         - htop
         - ncdu
+        - neofetch
+        - screenfetch
+        - inxi
         - mutt
         - i2c-tools
         - magic-wormhole
