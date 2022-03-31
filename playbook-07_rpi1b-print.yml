@@ -120,11 +120,67 @@
         - mc
         - htop
         - ncdu
+        - neofetch
+        - screenfetch
         - mutt
         - i2c-tools
         - magic-wormhole
+        - sshguard
+        - python3-apt
+        - apt-transport-https
+        - ca-certificates
+        - curl
+        - gnupg-agent
+        - software-properties-common
+        - ufw
         - wavemon
-  
+        - cmake
+        
+    - name: Create scripts subdirectory
+      file:
+        path: /home/mike/scripts
+        state: directory
+        mode: '0755'
+        owner: mike
+        group: mandj
+        
+    - name: Download reboot check script
+      get_url:
+        url: https://raw.githubusercontent.com/Bicko/vps-provisioning/master/is-reboot-required.sh
+        dest: /home/mike/scripts/is-reboot-required.sh
+        mode: '0755'
+        owner: mike
+        group: mandj
+
+    - name: Create tmux config file
+      copy:
+        dest: /home/mike/.tmux.conf
+        content: |
+          set -g status-bg blue
+          set -g status-fg white
+          set -ga message-style bg=yellow
+          set -g message-style fg=black
+          set -g pane-border-style fg=blue
+          set -g pane-active-border-style fg=red
+        backup: yes
+        mode: '0644'
+        owner: mike
+        group: mandj
+        
+    - name: Configure Firewall
+      command: "ufw {{ item }}"
+      with_items:
+        #- --force reset
+        - default deny incoming
+        - default allow outgoing
+        - allow 7056/tcp
+        - --force enable
+    - name: Stop UFW logging to /var/log/syslog
+      lineinfile:
+        path: /etc/rsyslog.d/20-ufw.conf
+        regexp: ' *# *& *stop *'
+        line: '& stop'
+
     - name: RPi - enable UART
       lineinfile:
         path: /boot/config.txt
