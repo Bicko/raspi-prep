@@ -126,13 +126,13 @@
         - ufw
         - wavemon
         
-  - name: Allow cups across network
-    shell: cupsctl --remote-any
+    - name: Allow cups across network
+      shell: cupsctl --remote-any
 
-  - name: Restart cups
-    service:
-      name: cups
-      state: restarted
+    - name: Restart cups
+      service:
+        name: cups
+        state: restarted
 
     - name: Create scripts subdirectory
       file:
