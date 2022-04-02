@@ -110,20 +110,13 @@
         - python3-picamera
         - tmux
         - vim
-        - mariadb-server
-        - mariadb-client
-        - python3-mysqldb
-        - nmap
-        - arp-scan
-        - mtr
-        - whois
         - mc
         - htop
         - ncdu
         - neofetch
         - screenfetch
+        - inxi
         - mutt
-        - i2c-tools
         - magic-wormhole
         - sshguard
         - python3-apt
@@ -181,41 +174,17 @@
         regexp: ' *# *& *stop *'
         line: '& stop'
 
-    - name: RPi - enable UART
+    - name: RPi - disable ACT LED (RPi Zero)
       lineinfile:
         path: /boot/config.txt
-        regexp: 'enable_uart *='
-        line: enable_uart=1
-
-#    - name: RPi - enable One-wire interface
-#      lineinfile:
-#        path: /boot/config.txt
-#        regexp: 'dtoverlay *= *w1-gpio'
-#        line: dtoverlay=w1-gpio
-
-    - name: RPi - enable SPI
-      lineinfile:
-        path: /boot/config.txt
-        regexp: 'dtparam *= *spi *='
-        line: dtparam=spi=on
-
-    - name: RPi - enable I2C
-      lineinfile:
-        path: /boot/config.txt
-        regexp: 'dtparam *= *i2c_arm *='
-        line: dtparam=i2c_arm=on
-
-#    - name: RPi - disable ACT LED (RPi Zero)
-#      lineinfile:
-#        path: /boot/config.txt
-#        regexp: 'dtparam *= *act_led_trigger *='
-#        line: dtparam=act_led_trigger=none
+        regexp: 'dtparam *= *act_led_trigger *='
+        line: dtparam=act_led_trigger=none
         
-#    - name: RPi - make ACT LED active low (RPi Zero)
-#      lineinfile:
-#        path: /boot/config.txt
-#        regexp: 'dtparam *= *act_led_activelow *='
-#        line: dtparam=act_led_activelow=on
+    - name: RPi - make ACT LED active low (RPi Zero)
+      lineinfile:
+        path: /boot/config.txt
+        regexp: 'dtparam *= *act_led_activelow *='
+        line: dtparam=act_led_activelow=on
 
     - name: Delete user account 'pi'
       user:
