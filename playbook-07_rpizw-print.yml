@@ -102,6 +102,8 @@
     - name: Install packages
       apt:
         pkg:
+        - cups
+        - sane
         - python3
         - python3-pip
         - tmux
@@ -124,6 +126,14 @@
         - ufw
         - wavemon
         
+  - name: Allow cups across network
+    shell: cupsctl --remote-any
+
+  - name: Restart cups
+    service:
+      name: cups
+      state: restarted
+
     - name: Create scripts subdirectory
       file:
         path: /home/mike/scripts
