@@ -116,7 +116,7 @@
         - inxi
         - mutt
         - magic-wormhole
-        - sshguard
+        #- sshguard
         - python3-apt
         - apt-transport-https
         - ca-certificates
