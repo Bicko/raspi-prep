@@ -172,7 +172,7 @@
 
     - name: Delete user account 'pi'
       user:
-        name: pi
+        name: emily
         state: absent
         remove: yes
         force: yes
