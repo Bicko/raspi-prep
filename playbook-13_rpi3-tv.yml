@@ -1,0 +1,221 @@
+---
+- hosts: localhost
+  connection: local
+  become: yes
+  vars:
+    host_name: tv.orchard
+    
+  tasks:
+    - name: Create group mandj
+      group:
+        name: mandj
+        gid: 1002
+        state: present
+        
+    - name: Create group gpio
+      group:
+        name: gpio
+        state: present
+        system: yes
+
+    - name: Create a user account for Mike
+      user:
+        name: mike
+        uid: 1969
+        group: mandj
+        password: '$6$ZbWanugns2E$6FeGCSWq97yivD1OZEMPPPWqEzhn.5GbvU4HEe.ohb7lXp3Dz5PcFWggdFh9.d/uvWr9Fbp4XiET2vahDALDY.'
+        groups: adm, dialout, cdrom, sudo, audio, video, plugdev, games, users, input, netdev, gpio, i2c, spi
+        append: yes
+        state: present
+        shell: /bin/bash
+        system: no
+        create_home: yes
+        
+    - name: Install ssh server
+      apt:
+        pkg:
+        - openssh-server
+
+    - name: Set Mike's authorized_key for PBP
+      authorized_key:
+        user: mike
+        state: present
+        key: 'sh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIE7QFx5HydQMkVFyZlmeA9Ll46IcXPklZzXcFO/IPiYX test@pbpro'
+            
+    - name: Set Mike's authorized_key for server
+      authorized_key:
+        user: mike
+        state: present
+        key: 'ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIK7tew3lbJkHS5LCC1Ad/sdfz1mWQXxCAbiYULZhazJ9 mike@apple'
+
+    - name: Set Mike's authorized_key for P14s
+      authorized_key:
+        user: mike
+        state: present  
+        key: 'ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJCtzjhKZSmZ4gvmUZlCCQxMmfg/6KEf7qSmEBFyT2wt mike@ThinkPad-P14s-Gen-2a'
+
+    - name: Set hostname
+      hostname:
+        name: "{{ host_name }}"
+    - name: Ensure hosts file has correct hostname too
+      lineinfile:
+        path: /etc/hosts
+        regexp: '^127\.0\.1\.1'
+        line: 127.0.1.1       {{ host_name }}
+     
+    - name: "Change SSH port number"
+      lineinfile:
+        dest: "/etc/ssh/sshd_config"
+        regexp: "^Port"
+        line: "Port 7056"
+      notify: Restart ssh
+      
+    - name: Disallow password authentication
+      lineinfile:
+        dest: "/etc/ssh/sshd_config"
+        regexp: "^PasswordAuthentication"
+        line: "PasswordAuthentication no"
+        state: present
+      notify: Restart ssh
+
+    - name: Disallow root SSH access
+      lineinfile:
+        dest: "/etc/ssh/sshd_config"
+        regexp: "^PermitRootLogin"
+        line: "PermitRootLogin no"
+        state: present
+      notify: Restart ssh
+  
+    - name: Set timezone
+      timezone:
+        name: Europe/London
+        
+    - name: Set GB locale
+      locale_gen:
+        name: en_GB.UTF-8
+        state: present
+
+    - name: Only run "update_cache=yes" if the last one is more than 3600 seconds (1 hr) ago
+      apt:
+        update_cache: yes
+        cache_valid_time: 3600
+        
+    - name: Install packages
+      apt:
+        pkg:
+        - python3
+        - python3-pip
+        - python3-gpiozero
+        - python3-matplotlib
+        - python3-smbus
+        - python3-picamera
+        - tmux
+        - vim
+        - mariadb-server
+        - mariadb-client
+        - python3-mysqldb
+        - nmap
+        - arp-scan
+        - mtr
+        - whois
+        - mc
+        - htop
+        - ncdu
+        - neofetch
+        - screenfetch
+        - inxi
+        - mutt
+        - i2c-tools
+        - magic-wormhole
+        - sshguard
+        - python3-apt
+        - apt-transport-https
+        - ca-certificates
+        - curl
+        - gnupg-agent
+        - software-properties-common
+        - ufw
+        - wavemon
+        - cmake
+  
+    - name: RPi - enable UART
+      lineinfile:
+        path: /boot/config.txt
+        regexp: 'enable_uart *='
+        line: enable_uart=1
+
+    - name: Delete user account 'pi'
+      user:
+        name: pi
+        state: absent
+        remove: yes
+        force: yes
+        
+    - name: Create scripts subdirectory
+      file:
+        path: /home/mike/scripts
+        state: directory
+        mode: '0755'
+        owner: mike
+        group: mandj
+        
+    - name: Download reboot check script
+      get_url:
+        url: https://raw.githubusercontent.com/Bicko/vps-provisioning/master/is-reboot-required.sh
+        dest: /home/mike/scripts/is-reboot-required.sh
+        mode: '0755'
+        owner: mike
+        group: mandj
+
+    - name: Create tmux config file
+      copy:
+        dest: /home/mike/.tmux.conf
+        content: |
+          set -g status-bg blue
+          set -g status-fg white
+          set -ga message-style bg=yellow
+          set -g message-style fg=black
+          set -g pane-border-style fg=blue
+          set -g pane-active-border-style fg=red
+        backup: yes
+        mode: '0644'
+        owner: mike
+        group: mandj
+        
+    - name: Configure Firewall
+      command: "ufw {{ item }}"
+      with_items:
+        #- --force reset
+        - default deny incoming
+        - default allow outgoing
+        - allow 7056/tcp
+        - --force enable
+    - name: Stop UFW logging to /var/log/syslog
+      lineinfile:
+        path: /etc/rsyslog.d/20-ufw.conf
+        regexp: ' *# *& *stop *'
+        line: '& stop'
+
+    - name: Update apt
+      apt:
+        update_cache: yes
+        force_apt_get: yes
+
+    - name: apt-get upgrade
+      apt:
+        upgrade: dist
+        force_apt_get: yes
+        
+    - name: apt-get autoremove
+      apt:
+        autoremove: yes
+        
+#    - name: Reboot the machine
+#      reboot:
+
+  handlers:
+    - name: Restart ssh
+      service:
+        name: sshd
+        state: restarted
+        
