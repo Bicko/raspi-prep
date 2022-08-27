@@ -40,7 +40,7 @@
       authorized_key:
         user: mike
         state: present
-        key: 'sh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIE7QFx5HydQMkVFyZlmeA9Ll46IcXPklZzXcFO/IPiYX test@pbpro'
+        key: 'ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIE7QFx5HydQMkVFyZlmeA9Ll46IcXPklZzXcFO/IPiYX test@pbpro'
             
     - name: Set Mike's authorized_key for server
       authorized_key:
