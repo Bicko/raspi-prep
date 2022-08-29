@@ -6,6 +6,7 @@ Method:
 1. dd the ISO to the RPi's SD card.
 2. Add an empty (or otherwise) file, 'ssh', to the boot partition.
 3. Put the prepared wpa_supplicant.conf file into the boot partition.
+3a. Put the prepared userconf file into the boot partition (see notes below).
 4. Put the SD card into the RPi and boot it.
 5. SSH to the freshly booted RPi, with default credentials
 6. Run the following:
