@@ -10,3 +10,5 @@ Method:
 5. SSH to the freshly booted RPi, with default credentials
 6. Run the following:
 **curl -sL https://raw.githubusercontent.com/Bicko/raspi-prep/master/start-script-XX_rpiX-XXXXX.sh | sudo bash**
+
+See https://www.raspberrypi.com/news/raspberry-pi-bullseye-update-april-2022/ for info about the removal of the 'pi' default user and how to generate a username & password for headless use.
