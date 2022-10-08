@@ -2,6 +2,8 @@
 - hosts: localhost
   connection: local
   become: yes
+  vars:
+    host_name: oracle.strangerthandata.com
   
   tasks:
     - name: Create group mandj
@@ -9,6 +11,7 @@
         name: mandj
         gid: 1002
         state: present
+        
     - name: Create group docker
       group:
         name: docker
@@ -27,11 +30,11 @@
         system: no
         create_home: yes
 
-    - name: Set Mike's authorized_key for X200
+    - name: Set Mike's authorized_key for P14s
       authorized_key:
         user: mike
-        state: present
-        key: 'ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIMmKwyb5Wg4lCZMulRAclBOJS6Ukxmv0MTmRIAR/OLIi mike@X200'
+        state: present  
+        key: 'ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJCtzjhKZSmZ4gvmUZlCCQxMmfg/6KEf7qSmEBFyT2wt mike@ThinkPad-P14s-Gen-2a'
       
     - name: Set Mike's authorized_key for server
       authorized_key:
@@ -41,12 +44,12 @@
         
     - name: Set hostname
       hostname:
-        name: docker
+        name: "{{ host_name }}"
     - name: Ensure hosts file has correct hostname too
       lineinfile:
         path: /etc/hosts
         regexp: '^127\.0\.1\.1'
-        line: 127.0.1.1       docker
+        line: 127.0.1.1       {{ host_name }}
      
     - name: "Change SSH port number"
       lineinfile:
@@ -83,15 +86,20 @@
     - name: Only run "update_cache=yes" if the last one is more than 3600 seconds (1 hr) ago
       apt:
         update_cache: yes
-        force_apt_get: yes
         cache_valid_time: 3600
         
     - name: Install packages
       apt:
         pkg:
         - tree
+        - python3
+        - python3-pip
+        - python3-matplotlib
         - tmux
         - vim
+        - mariadb-server
+        - mariadb-client
+        - python3-mysqldb
         - nmap
         - arp-scan
         - mtr
@@ -99,6 +107,10 @@
         - mc
         - htop
         - ncdu
+        - neofetch
+        - screenfetch
+        - inxi
+        - mutt
         - magic-wormhole
         - sshguard
         - python3-apt
@@ -107,8 +119,10 @@
         - curl
         - gnupg-agent
         - software-properties-common
-        - apache2
-        
+        - ufw
+        - wavemon
+        - cmake
+
     - name: Create scripts subdirectory
       file:
         path: /home/mike/scripts
@@ -124,7 +138,36 @@
         mode: '0755'
         owner: mike
         group: mandj
-        
+
+    - name: Create tmux config file
+      copy:
+        dest: /home/mike/.tmux.conf
+        content: |
+          set -g status-bg blue
+          set -g status-fg white
+          set -ga message-style bg=yellow
+          set -g message-style fg=black
+          set -g pane-border-style fg=blue
+          set -g pane-active-border-style fg=red
+        backup: yes
+        mode: '0644'
+        owner: mike
+        group: mandj
+
+    - name: Configure Firewall
+      command: "ufw {{ item }}"
+      with_items:
+        #- --force reset
+        - default deny incoming
+        - default allow outgoing
+        - allow 7056/tcp
+        - --force enable
+    - name: Stop UFW logging to /var/log/syslog
+      lineinfile:
+        path: /etc/rsyslog.d/20-ufw.conf
+        regexp: ' *# *& *stop *'
+        line: '& stop'
+
     - name: Add Docker’s official GPG key
       apt_key:
         id: 9DC858229FC7DD38854AE2D88D81803C0EBFCD88
@@ -164,76 +207,9 @@
     - name: apt-get autoremove
       apt:
         autoremove: yes
-        
-    - name: Set Apache default index.html
-      get_url:
-        url: https://raw.githubusercontent.com/Bicko/vps-provisioning/master/clever.bicko.tech.html
-        dest: /var/www/html/index.html
-        mode: '0644'
-        owner: mike
-        group: mandj
-    - name: Create Apache logs subdirectory
-      file:
-        path: /var/www/logs/clever.bicko.tech
-        state: directory
-        mode: '0755'
-        owner: root
-        group: root
-    - name: Set Apache virtual host file for clever.bicko.tech
-      get_url:
-        url: https://raw.githubusercontent.com/Bicko/vps-provisioning/master/clever.bicko.tech.vhost
-        dest: /etc/apache2/sites-available/clever.bicko.tech.conf
-        mode: '0644'
-        owner: root
-        group: root
-    - name: Enable proxy module
-      apache2_module:
-        state: present
-        name: proxy
-    - name: Enable rewrite module
-      shell: /usr/sbin/a2enmod rewrite
-      notify: Reload Apache
-    - name: Enable new site
-      shell: /usr/sbin/a2ensite clever.bicko.tech.conf
-      notify: Reload Apache
-        
-    - name: Create directories for clever.bicko.tech
-      file:
-        path: "{{ item }}"
-        state: directory
-        mode: '0755'
-        owner: mike
-        group: mandj
-      loop:
-        - /srv/www/docker/clever.bicko.tech/html
-        - /srv/www/docker/clever.bicko.tech/logs
-        
-    - name: Get index.php for clever.bicko.tech
-      get_url:
-        url: https://raw.githubusercontent.com/Bicko/vps-provisioning/master/clever.bicko.tech.php
-        dest: /srv/www/docker/clever.bicko.tech/html/index.php
-        mode: '0644'
-        owner: mike
-        group: mandj
-        
-    - name: Get docker-compose.yml for clever.bicko.tech
-      get_url:
-        url: https://raw.githubusercontent.com/Bicko/vps-provisioning/master/clever.bicko.tech.yml
-        dest: /srv/www/docker/clever.bicko.tech/html/docker-compose.yml
-        mode: '0644'
-        owner: mike
-        group: mandj
-        
-#    - name: Reboot the machine
-#      reboot:
 
   handlers:
     - name: Restart ssh
       service:
-        name: ssh
+        name: sshd
         state: restarted
-        
-    - name: Reload Apache
-      service:
-        name: apache2
-        state: reloaded
