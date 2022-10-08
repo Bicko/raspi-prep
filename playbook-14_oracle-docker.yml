@@ -122,6 +122,7 @@
         - ufw
         - wavemon
         - cmake
+        - locales
 
     - name: Create scripts subdirectory
       file:
