@@ -1,0 +1,239 @@
+---
+- hosts: localhost
+  connection: local
+  become: yes
+  
+  tasks:
+    - name: Create group mandj
+      group:
+        name: mandj
+        gid: 1002
+        state: present
+    - name: Create group docker
+      group:
+        name: docker
+        state: present
+        
+    - name: Create a user account for Mike
+      user:
+        name: mike
+        uid: 1969
+        group: mandj
+        password: '$6$ZbWanugns2E$6FeGCSWq97yivD1OZEMPPPWqEzhn.5GbvU4HEe.ohb7lXp3Dz5PcFWggdFh9.d/uvWr9Fbp4XiET2vahDALDY.'
+        groups: adm, dialout, cdrom, sudo, audio, video, plugdev, games, users, input, netdev, docker
+        append: yes
+        state: present
+        shell: /bin/bash
+        system: no
+        create_home: yes
+
+    - name: Set Mike's authorized_key for X200
+      authorized_key:
+        user: mike
+        state: present
+        key: 'ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIMmKwyb5Wg4lCZMulRAclBOJS6Ukxmv0MTmRIAR/OLIi mike@X200'
+      
+    - name: Set Mike's authorized_key for server
+      authorized_key:
+        user: mike
+        state: present
+        key: 'ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIK7tew3lbJkHS5LCC1Ad/sdfz1mWQXxCAbiYULZhazJ9 mike@apple'
+        
+    - name: Set hostname
+      hostname:
+        name: docker
+    - name: Ensure hosts file has correct hostname too
+      lineinfile:
+        path: /etc/hosts
+        regexp: '^127\.0\.1\.1'
+        line: 127.0.1.1       docker
+     
+    - name: "Change SSH port number"
+      lineinfile:
+        dest: "/etc/ssh/sshd_config"
+        regexp: "^Port"
+        line: "Port 7056"
+      notify: Restart ssh
+      
+    - name: Disallow password authentication
+      lineinfile:
+        dest: "/etc/ssh/sshd_config"
+        regexp: "^PasswordAuthentication"
+        line: "PasswordAuthentication no"
+        state: present
+      notify: Restart ssh
+
+    - name: Disallow root SSH access
+      lineinfile:
+        dest: "/etc/ssh/sshd_config"
+        regexp: "^PermitRootLogin"
+        line: "PermitRootLogin no"
+        state: present
+      notify: Restart ssh
+  
+    - name: Set timezone
+      timezone:
+        name: Europe/London
+        
+    - name: Set GB locale
+      locale_gen:
+        name: en_GB.UTF-8
+        state: present
+
+    - name: Only run "update_cache=yes" if the last one is more than 3600 seconds (1 hr) ago
+      apt:
+        update_cache: yes
+        force_apt_get: yes
+        cache_valid_time: 3600
+        
+    - name: Install packages
+      apt:
+        pkg:
+        - tree
+        - tmux
+        - vim
+        - nmap
+        - arp-scan
+        - mtr
+        - whois
+        - mc
+        - htop
+        - ncdu
+        - magic-wormhole
+        - sshguard
+        - python3-apt
+        - apt-transport-https
+        - ca-certificates
+        - curl
+        - gnupg-agent
+        - software-properties-common
+        - apache2
+        
+    - name: Create scripts subdirectory
+      file:
+        path: /home/mike/scripts
+        state: directory
+        mode: '0755'
+        owner: mike
+        group: mandj
+
+    - name: Download reboot check script
+      get_url:
+        url: https://raw.githubusercontent.com/Bicko/vps-provisioning/master/is-reboot-required.sh
+        dest: /home/mike/scripts/is-reboot-required.sh
+        mode: '0755'
+        owner: mike
+        group: mandj
+        
+    - name: Add Docker’s official GPG key
+      apt_key:
+        id: 9DC858229FC7DD38854AE2D88D81803C0EBFCD88
+        url: https://download.docker.com/linux/ubuntu/gpg
+        state: present
+        
+    - name: Add Docker repository into sources list.
+      apt_repository:
+        repo: deb [arch=amd64] https://download.docker.com/linux/ubuntu focal stable
+        state: present
+        mode: '0644'
+        
+    - name: Update apt
+      apt:
+        update_cache: yes
+        force_apt_get: yes
+        
+    - name: Install Docker
+      apt:
+        pkg:
+        - docker-ce
+        - docker-ce-cli
+        - containerd.io
+        - haveged
+        
+    - name: Download docker-compose
+      get_url:
+        url: https://github.com/docker/compose/releases/download/1.26.2/docker-compose-Linux-x86_64
+        dest: /usr/local/bin/docker-compose
+        mode: '0755'
+
+    - name: apt-get upgrade
+      apt:
+        upgrade: dist
+        force_apt_get: yes
+        
+    - name: apt-get autoremove
+      apt:
+        autoremove: yes
+        
+    - name: Set Apache default index.html
+      get_url:
+        url: https://raw.githubusercontent.com/Bicko/vps-provisioning/master/clever.bicko.tech.html
+        dest: /var/www/html/index.html
+        mode: '0644'
+        owner: mike
+        group: mandj
+    - name: Create Apache logs subdirectory
+      file:
+        path: /var/www/logs/clever.bicko.tech
+        state: directory
+        mode: '0755'
+        owner: root
+        group: root
+    - name: Set Apache virtual host file for clever.bicko.tech
+      get_url:
+        url: https://raw.githubusercontent.com/Bicko/vps-provisioning/master/clever.bicko.tech.vhost
+        dest: /etc/apache2/sites-available/clever.bicko.tech.conf
+        mode: '0644'
+        owner: root
+        group: root
+    - name: Enable proxy module
+      apache2_module:
+        state: present
+        name: proxy
+    - name: Enable rewrite module
+      shell: /usr/sbin/a2enmod rewrite
+      notify: Reload Apache
+    - name: Enable new site
+      shell: /usr/sbin/a2ensite clever.bicko.tech.conf
+      notify: Reload Apache
+        
+    - name: Create directories for clever.bicko.tech
+      file:
+        path: "{{ item }}"
+        state: directory
+        mode: '0755'
+        owner: mike
+        group: mandj
+      loop:
+        - /srv/www/docker/clever.bicko.tech/html
+        - /srv/www/docker/clever.bicko.tech/logs
+        
+    - name: Get index.php for clever.bicko.tech
+      get_url:
+        url: https://raw.githubusercontent.com/Bicko/vps-provisioning/master/clever.bicko.tech.php
+        dest: /srv/www/docker/clever.bicko.tech/html/index.php
+        mode: '0644'
+        owner: mike
+        group: mandj
+        
+    - name: Get docker-compose.yml for clever.bicko.tech
+      get_url:
+        url: https://raw.githubusercontent.com/Bicko/vps-provisioning/master/clever.bicko.tech.yml
+        dest: /srv/www/docker/clever.bicko.tech/html/docker-compose.yml
+        mode: '0644'
+        owner: mike
+        group: mandj
+        
+#    - name: Reboot the machine
+#      reboot:
+
+  handlers:
+    - name: Restart ssh
+      service:
+        name: ssh
+        state: restarted
+        
+    - name: Reload Apache
+      service:
+        name: apache2
+        state: reloaded
