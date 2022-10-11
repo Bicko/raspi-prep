@@ -55,7 +55,7 @@
       lineinfile:
         dest: "/etc/ssh/sshd_config"
         regexp: "^Port"
-        line: "Port 7056"
+        line: "Port 22"
       notify: Restart ssh
       
     - name: Disallow password authentication
