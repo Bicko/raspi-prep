@@ -132,7 +132,7 @@
         - mutt
         - i2c-tools
         - magic-wormhole
-        #- sshguard
+        - sshguard
         - python3-apt
         - apt-transport-https
         - ca-certificates
